@@ -54,7 +54,7 @@ def filter_images():
 
     print("Deleted %d images" % num_skipped)
 
-def configure_data():
+def data_transform():
     image_size = (180, 180)
     batch_size = 32
     train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
@@ -144,7 +144,7 @@ def make_model(input_shape, num_classes):
 def train():
     """Pipeline: Build, train and save model to models/model_6"""
     # Todo: Copy some code from seminar5 and https://keras.io/examples/vision/image_classification_from_scratch/
-    train_ds, val_ds = configure_data()
+    train_ds, val_ds = data_transform()
     image_size = (180, 180)
     batch_size = 64
     model = make_model(input_shape=[*image_size, 3], num_classes=2)
