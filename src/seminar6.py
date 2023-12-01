@@ -192,6 +192,6 @@ def upload():
 
 
 if __name__ == '__main__':
-    # download_data()
+    download_data()
     train()
     upload()
