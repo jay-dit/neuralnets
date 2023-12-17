@@ -22,7 +22,7 @@ PATH_TO_TEST_DATA = 'data/raw/spam_test.csv'
 PATH_TO_MODEL = 'models/model_7'
 BUCKET_NAME = 'neuralnets2023'
 # todo fix your git user name
-YOUR_GIT_USER = 'labintsev'
+YOUR_GIT_USER = 'jay-dit'
 
 
 def download_data():
@@ -42,10 +42,15 @@ def make_model():
     :return:
     """
     inputs = tf.keras.layers.Input(name='inputs', shape=[MAX_SEQ_LEN])
-    x = tf.keras.layers.Embedding(MAX_WORDS, output_dim=4, input_length=MAX_SEQ_LEN)(inputs)
-    x = tf.keras.layers.SimpleRNN(units=4)(x)
+
+    x = tf.keras.layers.Embedding(MAX_WORDS, output_dim=64, input_length=MAX_SEQ_LEN)(inputs)
+    x = tf.keras.layers.LSTM(units=32)(x)
+    x = tf.keras.layers.Dense(256,name='FC1',activation='relu')(x)
+    x = tf.keras.layers.Activation('relu')(x)
+    x = tf.keras.layers.Dropout(0.4)(x)
     x = tf.keras.layers.Dense(1, name='out_layer')(x)
     x = tf.keras.layers.Activation('sigmoid')(x)
+
     recurrent_model = tf.keras.Model(inputs=inputs, outputs=x)
     return recurrent_model
 
@@ -113,19 +118,12 @@ def upload():
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        prog='src/seminar7.py',
-        description='Seminar 7. SMS spam Classification with Recurrent Nets.')
-    parser.add_argument('--download', action='store_true', help='Download images and extract to data/raw directory')
-    parser.add_argument('--train', action='store_true', help=f'Build, train and save model to {PATH_TO_MODEL}')
-    parser.add_argument('--validate', action='store_true', help='Validate model on test subset')
-    parser.add_argument('--upload', action='store_true', help='Upload model to S3 storage')
-    args = parser.parse_args()
-    if args.download:
-        download_data()
-    if args.train:
-        train()
-    if args.validate:
-        validate()
-    if args.upload:
-        upload()
+
+
+    download_data()
+
+    train()
+
+    validate()
+
+    upload()
